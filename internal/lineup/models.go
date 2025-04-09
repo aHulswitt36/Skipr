@@ -22,3 +22,16 @@ const (
 	LeftCenter	Position="LCF"
 	RightCenter	Position="RCF"
 )
+
+type Assignment struct {
+    PlayerId string
+    Position Position
+    Inning int
+} 
+
+type Lineup struct {
+    Innings int
+    Players []Player
+    Defense map[int][]Assignment
+    BattingOrder []string
+}
