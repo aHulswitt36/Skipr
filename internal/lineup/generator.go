@@ -17,15 +17,22 @@ func GenerateLineup(players []Player, innings int) (Lineup, error){
         Innings: innings,
         Players: players,
         Defense: make(map[int][]Assignment),
+        BattingOrder: generateBattingOrder(players),
     }
 
-    // Generate a valid batting order
-    lineup.BattingOrder = generateBattingOrder(players)
+    playerAssignments := make(map[string][]Assignment)
 
     // Assign field positions for each inning
     for inning := 1; inning <= innings; inning++ {
-        assignments := assignPositionsForInning(players, inning, lineup)
+        assignments, err := assignPositionsForInning(players, inning, playerAssignments)
+        if err != nil {
+            return Lineup{}, err
+        }
         lineup.Defense[inning] = assignments
+
+        for _, a := range assignments {
+            playerAssignments[a.PlayerId] = append(playerAssignments[a.PlayerId], a)
+        }
     }
 
     // Validate game plan against rules
@@ -34,4 +41,18 @@ func GenerateLineup(players []Player, innings int) (Lineup, error){
     }
 
     return lineup, nil
+}
+
+func generateBattingOrder(players []Player) []string {
+    ids := make([]string, len(players))
+    for i, p := range players {
+        ids[i] = p.Id
+    }
+
+    r := rand.New(rand.NewSource(time.Now().UnixNano()))
+    r.Shuffle(len(ids), func(i, j int) {
+        ids[i], ids[j] = ids[j], ids[i]
+    })
+
+    return ids
 }
