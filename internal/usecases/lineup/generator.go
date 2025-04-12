@@ -36,34 +36,32 @@ func GenerateLineup(players []Player, innings int) (Lineup, error){
     }
 
     // Validate game plan against rules
-    if err := ValidateLineup(lineup); err != nil {
+    if err := ValidateLineup(lineup, players); err != nil {
         return Lineup{}, err
     }
 
     return lineup, nil
 }
 
-func generateBattingOrder(players []Player) []string {
-    ids := make([]string, len(players))
-    for i, p := range players {
-        ids[i] = p.Id
-    }
-
+func generateBattingOrder(players []Player) []Player {
     r := rand.New(rand.NewSource(time.Now().UnixNano()))
-    r.Shuffle(len(ids), func(i, j int) {
-        ids[i], ids[j] = ids[j], ids[i]
+	shuffled := make([]Player, len(players))
+	copy(shuffled, players)
+
+    r.Shuffle(len(shuffled), func(i, j int) {
+        shuffled[i], shuffled[j] = shuffled[j], shuffled[i]
     })
 
-    return ids
+    return shuffled
 }
 
-var infieldPositions = []string{"P", "C", "1B", "2B", "SS", "3B", "SF"}
-var outfieldPositions = []string{"LF", "LCF", "RCF", "RF"}
-var benchPosition = "Bench"
+var infieldPositions = []Position{"P", "C", "1B", "2B", "SS", "3B", "SF"}
+var outfieldPositions = []Position{"LF", "LCF", "RCF", "RF"}
+var benchPosition Position = Bench
 
-func assignPositionsForInning(players []Player, inning int, history map[string][]Assignment) ([]Assignment, err){
-	assignments := []Assignment
-	usedPositions := map[string]bool{}
+func assignPositionsForInning(players []Player, inning int, history map[string][]Assignment) ([]Assignment, error){
+	assignments := []Assignment{}
+	usedPositions := map[Position]bool{}
 	infieldCount := 0
 	outfieldCount := 0
 
@@ -77,8 +75,8 @@ func assignPositionsForInning(players []Player, inning int, history map[string][
 	for _, player := range shuffled {
 		// get players past assignments
 		past := history[player.Id]
-		positionCounts := make(map[string]int)
-		lastPosition := ""
+		positionCounts := make(map[Position]int)
+		var lastPosition Position
 
 		for _, a := range past {
 			positionCounts[a.Position]++
@@ -87,7 +85,7 @@ func assignPositionsForInning(players []Player, inning int, history map[string][
 			}
 		}
 
-		var assigned string
+		var assigned Position
 
 		if infieldCount < 7 {
 			for _, pos := range infieldPositions {
@@ -129,7 +127,3 @@ func assignPositionsForInning(players []Player, inning int, history map[string][
 	return assignments, nil
 }
 
-func ValidateLineup(lineup Lineup) string error {
-
-	return ""
-}

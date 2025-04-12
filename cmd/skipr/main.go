@@ -1,3 +1,5 @@
+package skipr
+
 func main() {
 
 }

@@ -21,6 +21,7 @@ const (
 	RightField	Position="RF"
 	LeftCenter	Position="LCF"
 	RightCenter	Position="RCF"
+	Bench 		Position="Bench"
 )
 
 type Assignment struct {
@@ -33,5 +34,5 @@ type Lineup struct {
     Innings int
     Players []Player
     Defense map[int][]Assignment
-    BattingOrder []string
+    BattingOrder []Player
 }
