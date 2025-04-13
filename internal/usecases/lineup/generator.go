@@ -119,6 +119,7 @@ func assignPositionsForInning(players []Player, inning int, history map[string][
 
 		assignments = append(assignments, Assignment{
 			PlayerId: player.Id,
+            PlayerName: player.Name,
 			Inning: inning,
 			Position: assigned,
 		})

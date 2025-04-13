@@ -25,6 +25,7 @@ const (
 )
 
 type Assignment struct {
+    PlayerName string
     PlayerId string
     Position Position
     Inning int
