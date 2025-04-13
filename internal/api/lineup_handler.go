@@ -2,12 +2,14 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"skipr/internal/usecases/lineup"
 )
 
 var players []lineup.Player
+var playerId int = 1
 
 func PlayerHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
@@ -19,6 +21,8 @@ func PlayerHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
+        p.Id = fmt.Sprintf("%d", playerId)
+        playerId++
 		players = append(players, p)
 		w.WriteHeader(http.StatusCreated)
 	default:
