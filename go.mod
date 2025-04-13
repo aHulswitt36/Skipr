@@ -1,3 +1,3 @@
-module skpr.coach
+module skipr
 
 go 1.24.2
