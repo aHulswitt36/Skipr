@@ -5,15 +5,15 @@ import (
 )
 
 func ValidateLineup(lineup Lineup, players []Player) error {
-	playerMap := map[string]Player{}
+	playerMap := map[int]Player{}
 	for _, p := range players {
 		playerMap[p.Id] = p
 	}
 
-	playerPositionCount := map[string]map[Position]int{}
-	lastPositions := map[string]Position{}
-	consecOutOrBench := map[string]int{}
-	infieldPlayed := map[string]bool{}
+	playerPositionCount := map[int]map[Position]int{}
+	lastPositions := map[int]Position{}
+	consecOutOrBench := map[int]int{}
+	infieldPlayed := map[int]bool{}
 
 	for inning := 1; inning <= 6; inning++ {
 		infielders := 0

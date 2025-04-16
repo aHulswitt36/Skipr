@@ -1,7 +1,7 @@
 package lineup
 
 type Player struct {
-	Id string
+	Id int
 	Name string
 	SkillTag string
 }
@@ -26,7 +26,7 @@ const (
 
 type Assignment struct {
     PlayerName string
-    PlayerId string
+    PlayerId int
     Position Position
     Inning int
 } 

@@ -20,7 +20,7 @@ func GenerateLineup(players []Player, innings int) (Lineup, error){
         BattingOrder: generateBattingOrder(players),
     }
 
-    playerAssignments := make(map[string][]Assignment)
+    playerAssignments := make(map[int][]Assignment)
 
     // Assign field positions for each inning
     for inning := 1; inning <= innings; inning++ {
@@ -59,7 +59,7 @@ var infieldPositions = []Position{"P", "C", "1B", "2B", "SS", "3B", "SF"}
 var outfieldPositions = []Position{"LF", "LCF", "RCF", "RF"}
 var benchPosition Position = Bench
 
-func assignPositionsForInning(players []Player, inning int, history map[string][]Assignment) ([]Assignment, error){
+func assignPositionsForInning(players []Player, inning int, history map[int][]Assignment) ([]Assignment, error){
 	assignments := []Assignment{}
 	usedPositions := map[Position]bool{}
 	infieldCount := 0
