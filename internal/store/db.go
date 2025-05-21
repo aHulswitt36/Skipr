@@ -26,5 +26,5 @@ func InitDatabase() error {
 	}
 
 	DB = db
-	return DB.AutoMigrate(&Player{})
+	return DB.AutoMigrate(&Team{}, &Player{})
 }

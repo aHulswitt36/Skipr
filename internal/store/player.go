@@ -1,8 +1,11 @@
 package store
 
+import "gorm.io/gorm"
+
 type Player struct {
-	Id int `gorm."primaryKey"`
-	Name string
+    gorm.Model
+    Name string `json:"name"`
+    TeamID uint `json:"team_id"`
 }
 
 func GetAllPlayers() ([]Player, error){
