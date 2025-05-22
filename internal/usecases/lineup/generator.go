@@ -56,7 +56,7 @@ func generateBattingOrder(players []Player) []Player {
 }
 
 var infieldPositions = []Position{"P", "C", "1B", "2B", "SS", "3B", "SF"}
-var outfieldPositions = []Position{"LF", "LCF", "RCF", "RF"}
+var outfieldPositions = []Position{"LF", "LCF", "CF", "RCF", "RF"}
 var benchPosition Position = Bench
 
 func assignPositionsForInning(players []Player, inning int, history map[int][]Assignment) ([]Assignment, error){
@@ -87,7 +87,7 @@ func assignPositionsForInning(players []Player, inning int, history map[int][]As
 
 		var assigned Position
 
-		if infieldCount < 7 {
+		if infieldCount <= 7 {
 			for _, pos := range infieldPositions {
 				if !usedPositions[pos] && positionCounts[pos] < 2 {
 					assigned = pos
@@ -97,7 +97,7 @@ func assignPositionsForInning(players []Player, inning int, history map[int][]As
 			}
 		}
 
-		if assigned == "" && outfieldCount < 5 {
+		if assigned == "" && outfieldCount <= 5 {
 			for _, pos := range outfieldPositions {
 				if !usedPositions[pos] && positionCounts[pos] < 2 && lastPosition != pos {
 					assigned = pos
