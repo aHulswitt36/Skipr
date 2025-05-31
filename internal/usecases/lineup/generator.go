@@ -1,9 +1,11 @@
 package lineup
 
 import (
-    "errors"
-    "math/rand"
-    "time"
+	"errors"
+	"math/rand"
+	"slices"
+	"time"
+    "sort"
 )
 
 func GenerateLineup(players []Player, innings int) (Lineup, error){
@@ -86,8 +88,21 @@ func assignPositionsForInning(players []Player, inning int, history map[int][]As
 		}
 
 		var assigned Position
+		if outfieldCount <= 5 {
+            for _, pos := range outfieldPositions {
+                // Rules for assigning outfield positions: 
+                // 1. Position must not be used already
+                // 2. Player must not have played the same position more than twice in the current game
+                // 3. Player's last position must not be in the outfield
+				if !usedPositions[pos] && positionCounts[pos] < 2 && !slices.Contains(outfieldPositions, lastPosition) {
+					assigned = pos
+					outfieldCount++
+					break
+				}
+			}
+		}
 
-		if infieldCount <= 7 {
+		if assigned == "" && infieldCount <= 7 {
 			for _, pos := range infieldPositions {
 				if !usedPositions[pos] && positionCounts[pos] < 2 {
 					assigned = pos
@@ -97,17 +112,7 @@ func assignPositionsForInning(players []Player, inning int, history map[int][]As
 			}
 		}
 
-		if assigned == "" && outfieldCount <= 5 {
-			for _, pos := range outfieldPositions {
-				if !usedPositions[pos] && positionCounts[pos] < 2 && lastPosition != pos {
-					assigned = pos
-					outfieldCount++
-					break
-				}
-			}
-		}
-
-		if assigned == "" && lastPosition != benchPosition {
+		if assigned == "" && lastPosition != benchPosition && len(usedPositions) > 12 { 
 			assigned = benchPosition
 		}
 
@@ -124,7 +129,32 @@ func assignPositionsForInning(players []Player, inning int, history map[int][]As
 			Position: assigned,
 		})
 	}
+    
+    sort.SliceStable(assignments, func(i, j int) bool {
+        return positionPriority[assignments[i].Position] < positionPriority[assignments[j].Position]
+    })
 
 	return assignments, nil
 }
+
+var positionPriority = map[Position]int{
+    "RF": 1,
+    "RCF": 2,
+    "CF": 3,
+    "LCF": 4,
+    "LF": 5,
+    "SF": 6,
+    "3B": 7,
+    "SS": 8,
+    "2B": 9,
+    "1B": 10,
+    "P": 11,
+    "C": 12,
+}
+
+// func sortDefenseAssignments(assignments []Assignment) []Assignment{
+//     sort.SliceStable(assignments, func(i, j int) bool {
+//         return positionPriority[assignments[i].Position] < positionPriority[assignments[j].Position]
+//     })
+// }
 
