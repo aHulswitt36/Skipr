@@ -7,8 +7,9 @@ import (
 func SetupRouter() http.Handler {
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/Player", PlayerHandler)
-	mux.HandleFunc("/Lineup", LineupHandler)
+	mux.HandleFunc("/player", PlayerHandler)
+    mux.HandleFunc("/players", PlayersHandler)
+	mux.HandleFunc("/lineup", LineupHandler)
 
 	return mux
 }

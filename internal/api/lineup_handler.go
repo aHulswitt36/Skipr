@@ -29,6 +29,71 @@ func PlayerHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func PlayersHandler(w http.ResponseWriter, r *http.Request) {
+    var p lineup.Player
+    p.Id = playerId
+    p.Name = "Donny"
+    playerId++
+    players = append(players, p)
+
+    p.Id = playerId
+    p.Name = "Veevan"
+    playerId++
+    players = append(players, p)
+
+    p.Id = playerId
+    p.Name = "Jonah"
+    playerId++
+    players = append(players, p)
+
+    p.Id = playerId
+    p.Name = "Caleb"
+    playerId++
+    players = append(players, p)
+
+    p.Id = playerId
+    p.Name = "Calen"
+    playerId++
+    players = append(players, p)
+
+    p.Id = playerId
+    p.Name = "Jaxx"
+    playerId++
+    players = append(players, p)
+
+    p.Id = playerId
+    p.Name = "Dez"
+    playerId++
+    players = append(players, p)
+
+    p.Id = playerId
+    p.Name = "Nate"
+    playerId++
+    players = append(players, p)
+
+    p.Id = playerId
+    p.Name = "Luke"
+    playerId++
+    players = append(players, p)
+
+    p.Id = playerId
+    p.Name = "Andrew"
+    playerId++
+    players = append(players, p)
+
+    p.Id = playerId
+    p.Name = "Lucas"
+    playerId++
+    players = append(players, p)
+
+    p.Id = playerId
+    p.Name = "Lorenzo"
+    playerId++
+    players = append(players, p)
+
+    w.WriteHeader(http.StatusCreated)
+}
+
 func LineupHandler(w http.ResponseWriter, r *http.Request){
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -38,11 +103,6 @@ func LineupHandler(w http.ResponseWriter, r *http.Request){
 	plan, err := lineup.GenerateLineup(players, 6)	
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	if error := lineup.ValidateLineup(plan, players); error != nil {
-		http.Error(w, "Validation failed: " + error.Error(), http.StatusBadRequest)
 		return
 	}
 	
